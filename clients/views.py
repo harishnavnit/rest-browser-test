@@ -12,21 +12,21 @@ def index():
     return HttpResponse(status=200)
 
 
-def start(request):
+def start(request, browser, url="http://python.org"):
     global browser_instance
-    browser_name = request.GET['browser']
-    browrser_url = request.GET['url']
+    browser = request.GET['browser']
+    # url = request.GET['url']
 
-    if browser_name == "firefox" or browser_name == "mozilla":
+    if browser == "firefox" or browser == "mozilla":
         browser_instance = webdriver.Firefox()
-    elif browser_name == "google" or browser_name == "chrome":
+    elif browser == "google" or browser == "chrome":
         browser_instance = webdriver.Chrome()
 
-    browser_instance.get(browrser_url)
+    browser_instance.get(url)
     return HttpResponse(status=200)
 
 
-def geturl(request):
+def geturl(request, browser):
     global browser_instance
 
     try:
@@ -38,7 +38,7 @@ def geturl(request):
     return HttpResponse(active_url)
 
 
-def stop(request):
+def stop(request, browser):
     global browser_instance
     try:
         browser_instance.close()
@@ -48,7 +48,7 @@ def stop(request):
     return HttpResponse(status=200)
 
 
-def cleanup(request):
+def cleanup(request, browser):
     global browser_instance
     try:
         browser_instance.delete_all_cookies()
