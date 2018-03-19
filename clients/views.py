@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http.response import Http404
 
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
@@ -12,10 +13,14 @@ def index():
     return HttpResponse(status=200)
 
 
-def start(request, browser, url="http://python.org"):
+def start(request):
     global browser_instance
-    browser = request.GET['browser']
-    # url = request.GET['url']
+
+    try:
+        browser = request.GET['browser']
+        url = request.GET['url']
+    except Exception as err:
+        return Http404("Invalid URL query")
 
     if browser == "firefox" or browser == "mozilla":
         browser_instance = webdriver.Firefox()
